@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="mg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Ambotaka – Fitantanana ny Fihaonan'ny Làlana</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════
+     AUTH SCREEN
+══════════════════════════════════════════════ -->
+<div id="authScreen" class="auth-card">
+  <div class="header-brand">
+    <i class="fas fa-traffic-light"></i>
+    <h1>Ambotaka</h1>
+    <p>Fitantanana ny fitohananan'ny fiara</p>
+  </div>
+  <div class="toggle-switch">
+    <button id="showSignupBtnMobile" class="toggle-btn"><i class="fas fa-user-plus"></i> Mamorona kaonty</button>
+  </div>
+
+  <!-- LOGIN -->
+  <div id="loginPanel" class="form-wrapper">
+    <div class="form-card">
+      <form id="loginForm">
+        <div class="input-group">
+          <label><i class="fas fa-user-circle"></i> Anarana</label>
+          <div class="input-field"><i class="fas fa-user"></i>
+            <input type="text" id="loginUsername" placeholder="Ohatra: Rado_MG" autocomplete="username">
+          </div>
+        </div>
+        <div class="input-group">
+          <label><i class="fas fa-lock"></i> Teny miafina</label>
+          <div class="input-field"><i class="fas fa-key"></i>
+            <div class="pwd-container">
+              <input type="password" id="loginPassword" placeholder="********">
+              <button type="button" class="toggle-pwd" data-pwd="loginPassword"><i class="far fa-eye-slash"></i></button>
+            </div>
+          </div>
+        </div>
+        <button type="submit" class="btn-primary"><i class="fas fa-sign-in-alt"></i> Hiditra</button>
+        <div class="forgot-link"><a href="#" id="forgotPwdLink"><i class="far fa-question-circle"></i> Adino ny tenimiafina?</a></div>
+      </form>
+      <div id="loginMsg" class="message-box"></div>
+    </div>
+  </div>
+
+  <!-- SIGNUP -->
+  <div id="signupPanel" class="form-wrapper hidden">
+    <div class="form-card">
+      <form id="signupForm" enctype="multipart/form-data">
+        <div class="profile-upload-section">
+          <div class="avatar-preview" id="avatarPreview">
+            <div class="default-avatar-icon" id="defaultAvatarIcon"><i class="fas fa-user-circle"></i></div>
+            <img id="profileImageDisplay" src="#" alt="profil" style="display:none;">
+          </div>
+          <div>
+            <label for="profileUpload" class="upload-label"><i class="fas fa-camera"></i> Sary</label>
+            <input type="file" id="profileUpload" accept="image/*">
+            <div class="helper-text"><i class="fas fa-info-circle"></i> PNG/JPG, &lt; 2MB</div>
+          </div>
+        </div>
+        <div class="input-group">
+          <label><i class="fas fa-user"></i> Anarana</label>
+          <div class="input-field"><i class="fas fa-user-tag"></i>
+            <input type="text" id="signupName" placeholder="Anarana (farafahakeliny 3)" autocomplete="off">
+          </div>
+        </div>
+        <div class="input-group">
+          <label><i class="fas fa-phone-alt"></i> Laharana finday</label>
+          <div class="input-field"><i class="fas fa-mobile-alt"></i>
+            <input type="tel" id="signupPhone" placeholder="+261 34 12 345 67">
+          </div>
+        </div>
+        <div class="input-group">
+          <label><i class="fas fa-lock"></i> Teny miafina</label>
+          <div class="input-field"><i class="fas fa-shield-alt"></i>
+            <div class="pwd-container">
+              <input type="password" id="signupPassword" placeholder="Farafahakeliny 8 tarehintsoratra">
+              <button type="button" class="toggle-pwd" data-pwd="signupPassword"><i class="far fa-eye-slash"></i></button>
+            </div>
+          </div>
+        </div>
+        <div class="input-group">
+          <label><i class="fas fa-check-circle"></i> Hamafiso ny teny miafina</label>
+          <div class="input-field"><i class="fas fa-lock"></i>
+            <div class="pwd-container">
+              <input type="password" id="signupConfirmPwd" placeholder="Avereno ny teny miafina">
+              <button type="button" class="toggle-pwd" data-pwd="signupConfirmPwd"><i class="far fa-eye-slash"></i></button>
+            </div>
+          </div>
+        </div>
+        <button type="submit" class="btn-primary"><i class="fas fa-user-check"></i> Misoratra anarana</button>
+      </form>
+      <div id="signupMsg" class="message-box"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     MAIN APP (hidden until login)
+══════════════════════════════════════════════ -->
+<div id="appScreen" class="hidden">
+
+  <!-- TOP NAV BAR -->
+  <nav class="topnav">
+    <div class="topnav-left">
+      <i class="fas fa-traffic-light" style="color:#3b82f6;font-size:1.3rem;"></i>
+      <span class="app-title">Ambotaka</span>
+    </div>
+    <div class="topnav-right">
+      <button class="icon-btn" id="searchRouteBtn" title="Itinéraire"><i class="fas fa-route"></i></button>
+      <button class="icon-btn" id="locateBtn" title="Ma position"><i class="fas fa-crosshairs"></i></button>
+      <button class="icon-btn" id="heatmapBtn" title="Heatmap"><i class="fas fa-fire"></i></button>
+      <button class="icon-btn" id="historyBtn" title="Historique"><i class="fas fa-history"></i></button>
+      <div class="avatar-btn-wrap">
+        <button class="avatar-topnav" id="profileMenuBtn">
+          <img id="navAvatar" src="" alt="" style="display:none;">
+          <i class="fas fa-user" id="navAvatarIcon"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- FILTER BAR -->
+  <div class="filter-bar">
+    <button class="filter-btn active" data-type="all"><i class="fas fa-layer-group"></i> Rehetra</button>
+    <button class="filter-btn" data-type="accident"><i class="fas fa-car-crash"></i> Loza</button>
+    <button class="filter-btn" data-type="embouteillage"><i class="fas fa-traffic-light"></i> Embouteillage</button>
+    <button class="filter-btn" data-type="route_fermee"><i class="fas fa-road"></i> Voarindrina</button>
+    <button class="filter-btn" data-type="travaux"><i class="fas fa-hard-hat"></i> Asa</button>
+    <button class="filter-btn" data-type="inondation"><i class="fas fa-water"></i> Ranobe</button>
+    <button class="filter-btn" data-type="controle"><i class="fas fa-shield-alt"></i> Fanaraha-maso</button>
+    <button class="filter-btn" data-type="anomalie"><i class="fas fa-exclamation-triangle"></i> Hafa</button>
+  </div>
+
+
+  <!-- MAP -->
+  <div id="map"></div>
+
+  <div class="topnav-center">
+    <div class="online-badge"><span class="online-dot"></span><span id="onlineCount">0</span> miasa</div>
+  </div>
+
+  <!-- FAB: Signal incident -->
+  <button class="fab-signal" id="fabSignal" title="Manamarika zava-misy">
+    <i class="fas fa-plus"></i>
+  </button>
+
+  <!-- VOICE FAB -->
+  <button class="fab-voice" id="fabVoice" title="Signalement vocal">
+    <i class="fas fa-microphone"></i>
+  </button>
+
+  <!-- PROFILE DROPDOWN -->
+  <div class="profile-dropdown hidden" id="profileDropdown">
+    <div class="dropdown-user-info">
+      <div class="dropdown-avatar">
+        <img id="dropdownAvatar" src="" style="display:none;">
+        <i class="fas fa-user-circle" id="dropdownAvatarIcon" style="font-size:2.5rem;color:#3b82f6;"></i>
+      </div>
+      <div>
+        <div class="dropdown-username" id="dropdownUsername">—</div>
+        <div class="dropdown-role" id="dropdownRole">Mpampiasa</div>
+      </div>
+    </div>
+    <div class="dropdown-stats">
+      <div class="stat-item"><i class="fas fa-star" style="color:#f59e0b;"></i><span id="userPoints">0</span> pts</div>
+      <div class="stat-item"><i class="fas fa-chart-line" style="color:#10b981;"></i><span id="userReliability">100</span>% fiainana</div>
+    </div>
+    <div class="dropdown-badges" id="dropdownBadges"></div>
+    <hr style="border-color:#e2e8f0;margin:0.5rem 0;">
+    <button class="dropdown-item" id="editProfileBtn"><i class="fas fa-edit"></i> Hanova profil</button>
+    <button class="dropdown-item" id="etaBtn"><i class="fas fa-clock"></i> Zarao ETA</button>
+    <button class="dropdown-item" id="adminPanelBtn" style="display:none;color:#e11d48;"><i class="fas fa-cog"></i> Tableau de bord Admin</button>
+    <button class="dropdown-item text-red" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Hiala</button>
+  </div>
+
+  <!-- INCIDENT MODAL -->
+  <div class="modal-overlay hidden" id="incidentModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2><i class="fas fa-map-marker-alt"></i> Manamarika Zava-misy</h2>
+        <button class="modal-close" id="closeIncidentModal"><i class="fas fa-times"></i></button>
+      </div>
+      <form id="incidentForm" enctype="multipart/form-data">
+        <div class="modal-body">
+          <div class="incident-types">
+            <button type="button" class="type-btn active" data-type="accident"><i class="fas fa-car-crash"></i><span>Loza</span></button>
+            <button type="button" class="type-btn" data-type="embouteillage"><i class="fas fa-traffic-light"></i><span>Embouteillage</span></button>
+            <button type="button" class="type-btn" data-type="route_fermee"><i class="fas fa-road"></i><span>Voarindrina</span></button>
+            <button type="button" class="type-btn" data-type="travaux"><i class="fas fa-hard-hat"></i><span>Asa</span></button>
+            <button type="button" class="type-btn" data-type="inondation"><i class="fas fa-water"></i><span>Ranobe</span></button>
+            <button type="button" class="type-btn" data-type="controle"><i class="fas fa-shield-alt"></i><span>Fanaraha-maso</span></button>
+            <button type="button" class="type-btn" data-type="anomalie"><i class="fas fa-exclamation-triangle"></i><span>Anomalia</span></button>
+            <button type="button" class="type-btn" data-type="autres"><i class="fas fa-question-circle"></i><span>Hafa</span></button>
+          </div>
+          <div class="input-group">
+            <label><i class="fas fa-align-left"></i> Famaritana (tsy voatery)</label>
+            <div class="input-field"><i class="fas fa-comment"></i>
+              <input type="text" id="incidentDescription" placeholder="Lazao bebe kokoa...">
+            </div>
+          </div>
+          <div class="input-group">
+            <label><i class="fas fa-clock"></i> Faharetan'ny signal (minitra)</label>
+            <div class="input-field"><i class="fas fa-hourglass-half"></i>
+              <input type="number" id="incidentDuration" value="30" min="15" max="480">
+            </div>
+          </div>
+          <div class="photo-upload-section">
+            <label class="upload-label" for="incidentPhoto"><i class="fas fa-camera"></i> Sary fanamarinana</label>
+            <input type="file" id="incidentPhoto" accept="image/*" capture="environment">
+            <div id="photoPreviewWrap" class="hidden"><img id="photoPreview" src="#" alt="preview"></div>
+          </div>
+          <div class="gps-info">
+            <i class="fas fa-map-marker-alt" style="color:#3b82f6;"></i>
+            <span id="gpsInfoText">Mitady toerana...</span>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" id="cancelIncident">Ajanony</button>
+          <button type="submit" class="btn-primary" style="flex:1;"><i class="fas fa-paper-plane"></i> Mandefa</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- INCIDENT DETAIL MODAL -->
+  <div class="modal-overlay hidden" id="detailModal">
+    <div class="modal modal-large">
+      <div class="modal-header">
+        <h2 id="detailTitle">—</h2>
+        <button class="modal-close" id="closeDetailModal"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body" id="detailBody">
+        <!-- filled by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ROUTE SEARCH MODAL -->
+  <div class="modal-overlay hidden" id="routeModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2><i class="fas fa-route"></i> Mitady Lalana</h2>
+        <button class="modal-close" id="closeRouteModal"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="input-group">
+          <label><i class="fas fa-map-marker-alt"></i> Destination</label>
+          <div class="input-field"><i class="fas fa-search"></i>
+            <input type="text" id="destinationInput" placeholder="Andrainarivo, RN1, ...">
+          </div>
+        </div>
+        <div id="routeResults" class="route-results"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" id="closeRouteModal2">Ajanony</button>
+        <button class="btn-primary" id="searchRouteAction" style="flex:1;"><i class="fas fa-search"></i> Mitady</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- HISTORY MODAL -->
+  <div class="modal-overlay hidden" id="historyModal">
+    <div class="modal modal-large">
+      <div class="modal-header">
+        <h2><i class="fas fa-history"></i> Tantaran'ny Signal</h2>
+        <button class="modal-close" id="closeHistoryModal"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="input-group">
+          <label><i class="fas fa-calendar"></i> Daty</label>
+          <div class="input-field"><i class="fas fa-calendar-alt"></i>
+            <input type="date" id="historyDate">
+          </div>
+        </div>
+        <div id="historyList" class="history-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ETA MODAL -->
+  <div class="modal-overlay hidden" id="etaModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2><i class="fas fa-clock"></i> Zarao ETA</h2>
+        <button class="modal-close" id="closeEtaModal"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="input-group">
+          <label><i class="fas fa-hourglass"></i> Hafany minitra aho hihaona (minitra)</label>
+          <div class="input-field"><i class="fas fa-clock"></i>
+            <input type="number" id="etaMinutes" value="30" min="1" max="300">
+          </div>
+        </div>
+        <div class="input-group">
+          <label><i class="fas fa-comment"></i> Hafatra</label>
+          <div class="input-field"><i class="fas fa-comment-dots"></i>
+            <input type="text" id="etaMessage" placeholder="Ex: Voasakana eo amin'ny Ankorondrano...">
+          </div>
+        </div>
+        <div id="etaLinkResult" class="eta-link-box hidden"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" id="closeEtaModal2">Ajanony</button>
+        <button class="btn-primary" id="generateEtaBtn" style="flex:1;"><i class="fas fa-share-alt"></i> Mamorona rohy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- EDIT PROFILE MODAL -->
+  <div class="modal-overlay hidden" id="editProfileModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2><i class="fas fa-user-edit"></i> Hanova Profil</h2>
+        <button class="modal-close" id="closeEditProfileModal"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="profile-upload-section">
+          <div class="avatar-preview" id="editAvatarPreview">
+            <img id="editAvatarImg" src="#" style="display:none;">
+            <i class="fas fa-user-circle" id="editAvatarIcon" style="font-size:2rem;color:#3b82f6;"></i>
+          </div>
+          <label class="upload-label" for="editProfilePic"><i class="fas fa-camera"></i> Hanova sary</label>
+          <input type="file" id="editProfilePic" accept="image/*" style="display:none;">
+        </div>
+        <div class="input-group">
+          <label><i class="fas fa-user"></i> Anarana vaovao</label>
+          <div class="input-field"><i class="fas fa-user-tag"></i>
+            <input type="text" id="editUsername" placeholder="Anarana vaovao">
+          </div>
+        </div>
+        <div id="editProfileMsg" class="message-box"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" id="closeEditProfileModal2">Ajanony</button>
+        <button class="btn-primary" id="saveProfileBtn" style="flex:1;"><i class="fas fa-save"></i> Tehiry</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       ADMIN PANEL
+  ════════════════════════════════════════ -->
+  <div class="modal-overlay hidden" id="adminPanel">
+    <div class="modal modal-full">
+      <div class="modal-header" style="background:linear-gradient(135deg,#1e3a8a,#0f172a);">
+        <h2 style="color:white;"><i class="fas fa-shield-alt"></i> Tableau de bord – Admin</h2>
+        <button class="modal-close" id="closeAdminPanel" style="color:white;"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body admin-body">
+        <!-- TABS -->
+        <div class="admin-tabs">
+          <button class="admin-tab active" data-tab="stats"><i class="fas fa-chart-bar"></i> Statistiques</button>
+          <button class="admin-tab" data-tab="leaderboard"><i class="fas fa-trophy"></i> Classement</button>
+          <button class="admin-tab" data-tab="badActors"><i class="fas fa-user-slash"></i> Fausse info</button>
+          <button class="admin-tab" data-tab="priority"><i class="fas fa-broadcast-tower"></i> Signal Prioritaire</button>
+        </div>
+
+        <!-- STATS TAB -->
+        <div class="admin-tab-content active" id="tab-stats">
+          <div class="stats-grid" id="statsGrid">
+            <div class="stat-card"><div class="stat-val" id="statUsers">—</div><div class="stat-label">Mpampiasa</div></div>
+            <div class="stat-card"><div class="stat-val" id="statIncidents">—</div><div class="stat-label">Signal Total</div></div>
+            <div class="stat-card"><div class="stat-val" id="statActive">—</div><div class="stat-label">Signal Miasa</div></div>
+          </div>
+          <h3 style="margin:1rem 0 0.5rem;font-size:0.9rem;color:#64748b;">Signal isaky ny ora</h3>
+          <div class="chart-wrap"><canvas id="hourlyChart" height="120"></canvas></div>
+          <h3 style="margin:1rem 0 0.5rem;font-size:0.9rem;color:#64748b;">Amin'ny lalana lehibe</h3>
+          <div id="routeStatsBar"></div>
+        </div>
+
+        <!-- LEADERBOARD TAB -->
+        <div class="admin-tab-content hidden" id="tab-leaderboard">
+          <div id="leaderboardList" class="leaderboard-list"></div>
+        </div>
+
+        <!-- BAD ACTORS TAB -->
+        <div class="admin-tab-content hidden" id="tab-badActors">
+          <p style="font-size:0.8rem;color:#64748b;margin-bottom:1rem;">Mpampiasa manome angom-baovao diso (fiainana &lt; 70%)</p>
+          <div id="badActorsList"></div>
+        </div>
+
+        <!-- PRIORITY SIGNAL TAB -->
+        <div class="admin-tab-content hidden" id="tab-priority">
+          <p style="font-size:0.8rem;color:#64748b;margin-bottom:1rem;">Mandefa signal ofisialy (miseho miorina bebe kokoa amin'ny sarintany)</p>
+          <form id="priorityForm" enctype="multipart/form-data">
+            <div class="incident-types" style="margin-bottom:1rem;">
+              <button type="button" class="type-btn active" data-type="travaux"><i class="fas fa-hard-hat"></i><span>Asa</span></button>
+              <button type="button" class="type-btn" data-type="route_fermee"><i class="fas fa-road"></i><span>Voarindrina</span></button>
+              <button type="button" class="type-btn" data-type="anomalie"><i class="fas fa-exclamation-triangle"></i><span>Anomalia</span></button>
+              <button type="button" class="type-btn" data-type="controle"><i class="fas fa-shield-alt"></i><span>Fanaraha-maso</span></button>
+            </div>
+            <div class="input-group">
+              <label>Famaritana</label>
+              <div class="input-field"><i class="fas fa-comment"></i><input type="text" id="priorityDescription" placeholder="Signal ofisialy avy amin'ny Admin..."></div>
+            </div>
+            <div class="input-group">
+              <label>Faharetan'ny signal (minitra)</label>
+              <div class="input-field"><i class="fas fa-clock"></i><input type="number" id="priorityDuration" value="120" min="15" max="1440"></div>
+            </div>
+            <div class="gps-info"><i class="fas fa-map-marker-alt" style="color:#3b82f6;"></i><span id="priorityGpsText">Mitady toerana...</span></div>
+            <button type="submit" class="btn-primary" style="margin-top:1rem;width:100%;background:#e11d48;"><i class="fas fa-broadcast-tower"></i> Mandefa Signal Prioritaire</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST CONTAINER -->
+  <div id="toastContainer"></div>
+
+  <!-- HEATMAP TOGGLE OVERLAY -->
+  <div id="heatmapOverlay" class="heatmap-overlay hidden">
+    <span><i class="fas fa-fire" style="color:#ef4444;"></i> Heatmap miasa</span>
+    <button id="closeHeatmap" class="btn-secondary" style="padding:0.3rem 0.8rem;font-size:0.75rem;">Ajanony</button>
+  </div>
+
+</div><!-- /#appScreen -->
+
+<!-- ══ SCRIPTS ══ -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+<script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

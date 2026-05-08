@@ -1,0 +1,355 @@
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(145deg, #0b1120 0%, #0a0f1c 100%);
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            position: relative;
+        }
+
+        /* sary ambadika maoderina misy fiantraikany orana/menarana */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle at 15% 40%, rgba(56, 139, 253, 0.08) 1px, transparent 1px);
+            background-size: 35px 35px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* boaty lehibe fotsy mangarahara kely (glassmorphism) */
+        .auth-card {
+            max-width: 480px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(2px);
+            border-radius: 2rem;
+            box-shadow: 0 25px 50px -10px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(56, 139, 253, 0.2);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+
+        /* lohan'ny pejy misy logo sy lohateny */
+        .header-brand 
+        {
+            padding: 1.4rem 1.5rem 1rem;
+            text-align: center;
+        }
+
+        .header-brand i {
+            font-size: 2.3rem;
+            color: #3b82f6;
+            background: rgba(59, 130, 246, 0.15);
+            padding: 0.6rem;
+            border-radius: 1.5rem;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        .header-brand h1 {
+            font-size: 1.7rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff, #cbd5e1);
+            background-clip: text;
+            -webkit-background-clip: text;
+
+            letter-spacing: -0.3px;
+        }
+
+        .header-brand p {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            margin-top: 0.3rem;
+            font-weight: 500;
+        }
+
+        /* toggler rohy : hanehoana ny fisoratana */
+        .toggle-switch 
+        {
+            padding: 0.8rem 1.5rem;
+            text-align: center;
+        }
+
+        .toggle-btn {
+            background: none;
+            border: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #1e293b;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0.5rem 1.2rem;
+            border-radius: 3rem;
+            transition: all 0.2s;
+            background: #eef2ff;
+            color: #1e40af;
+        }
+
+        .toggle-btn i {
+            font-size: 0.9rem;
+        }
+
+        .toggle-btn:active {
+            transform: scale(0.97);
+        }
+
+        /* conteneur formulaire */
+        .form-wrapper {
+            padding: 1.8rem 1.5rem 2rem;
+        }
+
+        .form-card {
+            transition: 0.2s;
+        }
+
+        .input-group {
+            margin-bottom: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .input-group label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #0f172a;
+            letter-spacing: 0.3px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .input-group label i {
+            color: #3b82f6;
+            width: 18px;
+            font-size: 0.85rem;
+        }
+
+        .input-field {
+            display: flex;
+            align-items: center;
+            background: #ffffff;
+            border-radius: 1.2rem;
+            padding: 0.2rem 1rem;
+            border: 1px solid #cbd5e1;
+            transition: all 0.2s;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+        }
+
+        .input-field:focus-within {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
+        }
+
+        .input-field i {
+            color: #3b82f6;
+            font-size: 1rem;
+            margin-right: 12px;
+        }
+
+        .input-field input {
+            background: transparent;
+            border: none;
+            width: 100%;
+            padding: 0.85rem 0;
+            color: #0f172a;
+            font-size: 0.9rem;
+            font-weight: 500;
+            outline: none;
+        }
+
+        .input-field input::placeholder {
+            color: #94a3b8;
+            font-weight: 400;
+        }
+
+        /* seho sy manafina tenimiafina */
+        .pwd-container {
+            position: relative;
+            width: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .pwd-container input {
+            flex: 1;
+            padding-right: 35px;
+        }
+
+        .toggle-pwd {
+            position: absolute;
+            right: 0;
+            background: transparent;
+            border: none;
+            color: #64748b;
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 0 8px;
+        }
+
+        .toggle-pwd:hover {
+            color: #2563eb;
+        }
+
+        /* sary mombamomba (profil) */
+        .profile-upload-section {
+            background: #f1f5f9;
+            border-radius: 1.2rem;
+            padding: 0.9rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border: 1px solid #e2e8f0;
+            justify-content: center;
+        }
+
+        .avatar-preview {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            border: 2px solid #3b82f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background-color: #cbd5e1;
+        }
+
+        .avatar-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .default-avatar-icon {
+            font-size: 2rem;
+            color: #3b82f6;
+        }
+
+        .upload-label {
+            background: #eef2ff;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #1e3a8a;
+            border: 1px solid #b9d0f8;
+        }
+
+        .upload-label i {
+            font-size: 0.8rem;
+        }
+
+        #profileFile {
+            display: none;
+        }
+
+        .helper-text {
+            font-size: 0.6rem;
+            color: #475569;
+            margin-top: 5px;
+            margin-left: 0.5rem;
+        }
+
+        /* bokotra lehibe */
+        .btn-primary {
+            width: 100%;
+            background: #1e3a8a;
+            border: none;
+            border-radius: 2rem;
+            padding: 0.9rem;
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.97);
+            background: #0f2b6d;
+        }
+
+        .forgot-link {
+            text-align: right;
+            margin-top: 0.8rem;
+            font-size: 0.7rem;
+        }
+
+        .forgot-link a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .message-box {
+            font-size: 0.7rem;
+            margin-top: 1rem;
+            text-align: center;
+            padding: 0.5rem;
+            border-radius: 1.2rem;
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+
+        .error-msg {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .success-msg {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        hr {
+            margin: 1rem 0;
+            border-color: #e2e8f0;
+        }
+
+        #incidentForm
+        {
+            overflow: auto;
+        }
+
+        /* responsive -- ho an'ny finday */
+        @media (max-width: 480px) {
+            .form-wrapper {
+                padding: 1.3rem;
+            }
+            .avatar-preview {
+                width: 55px;
+                height: 55px;
+            }
+        }
