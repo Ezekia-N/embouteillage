@@ -7,6 +7,14 @@
  * Ngrok: ngrok http 3000
  */
 
+require('dotenv').config();
+
+const port = process.env.PORT || 3000; // Render définit automatiquement la variable PORT
+const dbPassword = process.env.DB_PASSWORD;
+
+console.log(`Le serveur tourne sur le port ${port}`);
+// Votre logique de connexion à la base de données utilisera dbPassword
+
 const express = require('express');
 const http = require('http');
 const WebSocket = require('ws');
