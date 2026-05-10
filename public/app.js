@@ -14,6 +14,7 @@ const API_BASE = '';   // same origin
 const WS_URL = (isLocal ? 'ws://' : 'wss://') + location.host;
 
 document.getElementById("profileUpload").style.visibility = "hidden";
+const mitadyId = document.getElementById("mitadyId");
 
 // ── State ────────────────────────────────────────────────────────────────────
 let currentUser = null;
@@ -535,26 +536,26 @@ window.showRoute = function(fromLat, fromLng, toLat, toLng, name) {
   // Open in Google Maps
   if (IsOpen)
   {
-  const gmUrl = `https://www.google.com/maps/dir/${fromLat},${fromLng}/${toLat},${toLng}`;
-  const btn = document.createElement('div');
-  btn.style.cssText = 'position:fixed;bottom:5rem;left:50%;transform:translateX(-50%);z-index:300;';
-  btn.innerHTML = `<a href="${gmUrl}" target="_blank" style="background:#1e3a8a;color:white;padding:0.6rem 1.2rem;border-radius:2rem;font-size:0.82rem;font-weight:700;text-decoration:none;display:flex;align-items:center;gap:6px;box-shadow:0 4px 12px rgba(0,0,0,0.2);">
-    <i class="fas fa-external-link-alt"></i> Jereo amin'ny Google Maps
-  </a>`;
-  document.body.appendChild(btn);
-  setTimeout(() => btn.remove(), 6000);
+    const gmUrl = `https://www.google.com/maps/dir/${fromLat},${fromLng}/${toLat},${toLng}`;
+    window.location.href = `${gmUrl}`;
+    // const btn = document.createElement('div');
+    // btn.style.cssText = 'position:fixed;bottom:5rem;left:50%;transform:translateX(-50%);z-index:300;';
+    // btn.innerHTML = `<a href="${gmUrl}" target="_blank" style="background:#1e3a8a;color:white;padding:0.6rem 1.2rem;border-radius:2rem;font-size:0.82rem;font-weight:700;text-decoration:none;display:flex;align-items:center;gap:6px;box-shadow:0 4px 12px rgba(0,0,0,0.2);">
+    //   <i class="fas fa-external-link-alt"></i> Jereo amin'ny Google Maps
+    // </a>`;
+    // document.body.appendChild(btn);
+    // setTimeout(() => btn.remove(), 6000);
   }
   else
   {
-  if (routeLine) map.removeLayer(routeLine);
-  routeLine = L.polyline([[fromLat, fromLng], [toLat, toLng]], {
-    color: '#3b82f6', weight: 4, opacity: 0.8, dashArray: '8,6'
-  }).addTo(map);
-  map.fitBounds([[fromLat, fromLng], [toLat, toLng]], { padding: [30, 30] });
-  closeModal('routeModal');
-  toast(`Itinéraire: ${name}`, 'success');
+    if (routeLine) map.removeLayer(routeLine);
+    routeLine = L.polyline([[fromLat, fromLng], [toLat, toLng]], {
+      color: '#3b82f6', weight: 4, opacity: 0.8, dashArray: '8,6'
+    }).addTo(map);
+    map.fitBounds([[fromLat, fromLng], [toLat, toLng]], { padding: [30, 30] });
+    closeModal('routeModal');
+    toast(`Itinéraire: ${name}`, 'success');
   }
-
 };
 
 // ── History ───────────────────────────────────────────────────────────────────
@@ -899,7 +900,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('locateBtn').addEventListener('click', () => {
     getPosition();
     toast('Mitady toerana...', 'info', 2000);
-        IsOpen = false;
+    IsOpen = false;
+    mitadyId.textContent = "Mitady toerana";
     openModal('routeModal');
 
   });
@@ -917,6 +919,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   document.getElementById('searchRouteBtn').addEventListener('click', () => {
     IsOpen = true;
+    mitadyId.textContent = "Mitady Lalana";
     openModal('routeModal')});
   document.getElementById('closeRouteModal').addEventListener('click', () => closeModal('routeModal'));
   document.getElementById('closeRouteModal2').addEventListener('click', () => closeModal('routeModal'));

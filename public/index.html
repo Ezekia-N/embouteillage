@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Ambotaka – Fitantanana ny Fihaonan'ny Làlana</title>
+<title>Ambotaka – Fitantanana ny fitohanan'ny fiara</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
@@ -21,7 +21,7 @@
   <div class="header-brand">
     <i class="fas fa-traffic-light"></i>
     <h1>Ambotaka</h1>
-    <p>Fitantanana ny fitohananan'ny fiara</p>
+    <p>Fitantanana ny fitohanan'ny fiara</p>
   </div>
   <div class="toggle-switch">
     <button id="showSignupBtnMobile" class="toggle-btn"><i class="fas fa-user-plus"></i> Mamorona kaonty</button>
@@ -34,7 +34,7 @@
         <div class="input-group">
           <label><i class="fas fa-user-circle"></i> Anarana</label>
           <div class="input-field"><i class="fas fa-user"></i>
-            <input type="text" id="loginUsername" placeholder="Ohatra: Rado_MG" autocomplete="username">
+            <input type="text" id="loginUsername" placeholder="Rado_MG" autocomplete="username">
           </div>
         </div>
         <div class="input-group">
@@ -71,7 +71,7 @@
         <div class="input-group">
           <label><i class="fas fa-user"></i> Anarana</label>
           <div class="input-field"><i class="fas fa-user-tag"></i>
-            <input type="text" id="signupName" placeholder="Anarana (farafahakeliny 3)" autocomplete="off">
+            <input type="text" id="signupName" placeholder="Anarana (farafahakeliny litera 3)" autocomplete="off">
           </div>
         </div>
         <div class="input-group">
@@ -81,10 +81,10 @@
           </div>
         </div>
         <div class="input-group">
-          <label><i class="fas fa-lock"></i> Teny miafina</label>
+          <label><i class="fas fa-lock"></i> Teny miafina (Farafahakeliny tarehitsoratra 8)</label>
           <div class="input-field"><i class="fas fa-shield-alt"></i>
             <div class="pwd-container">
-              <input type="password" id="signupPassword" placeholder="Farafahakeliny 8 tarehintsoratra">
+              <input type="password" id="signupPassword" placeholder="********">
               <button type="button" class="toggle-pwd" data-pwd="signupPassword"><i class="far fa-eye-slash"></i></button>
             </div>
           </div>
@@ -93,7 +93,7 @@
           <label><i class="fas fa-check-circle"></i> Hamafiso ny teny miafina</label>
           <div class="input-field"><i class="fas fa-lock"></i>
             <div class="pwd-container">
-              <input type="password" id="signupConfirmPwd" placeholder="Avereno ny teny miafina">
+              <input type="password" id="signupConfirmPwd" placeholder="********">
               <button type="button" class="toggle-pwd" data-pwd="signupConfirmPwd"><i class="far fa-eye-slash"></i></button>
             </div>
           </div>
@@ -117,8 +117,8 @@
       <span class="app-title">Ambotaka</span>
     </div>
     <div class="topnav-right">
-      <button class="icon-btn" id="searchRouteBtn" title="Itinéraire"><i class="fas fa-route"></i></button>
-      <button class="icon-btn" id="locateBtn" title="Ma position"><i class="fas fa-crosshairs"></i></button>
+      <button class="icon-btn" id="searchRouteBtn" title="Mitady lalana"><i class="fas fa-route"></i></button>
+      <button class="icon-btn" id="locateBtn" title="Mitady toerana"><i class="fas fa-crosshairs"></i></button>
       <button class="icon-btn" id="heatmapBtn" title="Heatmap"><i class="fas fa-fire"></i></button>
       <button class="icon-btn" id="historyBtn" title="Historique"><i class="fas fa-history"></i></button>
       <div class="avatar-btn-wrap">
@@ -137,7 +137,7 @@
     <button class="filter-btn" data-type="embouteillage"><i class="fas fa-traffic-light"></i> Embouteillage</button>
     <button class="filter-btn" data-type="route_fermee"><i class="fas fa-road"></i> Voarindrina</button>
     <button class="filter-btn" data-type="travaux"><i class="fas fa-hard-hat"></i> Asa</button>
-    <button class="filter-btn" data-type="inondation"><i class="fas fa-water"></i> Ranobe</button>
+    <button class="filter-btn" data-type="inondation"><i class="fas fa-water"></i> Rano miakatra</button>
     <button class="filter-btn" data-type="controle"><i class="fas fa-shield-alt"></i> Fanaraha-maso</button>
     <button class="filter-btn" data-type="anomalie"><i class="fas fa-exclamation-triangle"></i> Hafa</button>
   </div>
@@ -179,7 +179,7 @@
     <div class="dropdown-badges" id="dropdownBadges"></div>
     <hr style="border-color:#e2e8f0;margin:0.5rem 0;">
     <button class="dropdown-item" id="editProfileBtn"><i class="fas fa-edit"></i> Hanova profil</button>
-    <button class="dropdown-item" id="etaBtn"><i class="fas fa-clock"></i> Zarao ETA</button>
+    <button class="dropdown-item" id="etaBtn"><i class="fas fa-clock"></i>Mizara ny toerana misy anao</button>
     <button class="dropdown-item" id="adminPanelBtn" style="display:none;color:#e11d48;"><i class="fas fa-cog"></i> Tableau de bord Admin</button>
     <button class="dropdown-item text-red" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Hiala</button>
   </div>
@@ -198,7 +198,7 @@
             <button type="button" class="type-btn" data-type="embouteillage"><i class="fas fa-traffic-light"></i><span>Embouteillage</span></button>
             <button type="button" class="type-btn" data-type="route_fermee"><i class="fas fa-road"></i><span>Voarindrina</span></button>
             <button type="button" class="type-btn" data-type="travaux"><i class="fas fa-hard-hat"></i><span>Asa</span></button>
-            <button type="button" class="type-btn" data-type="inondation"><i class="fas fa-water"></i><span>Ranobe</span></button>
+            <button type="button" class="type-btn" data-type="inondation"><i class="fas fa-water"></i><span>Rano miakatra</span></button>
             <button type="button" class="type-btn" data-type="controle"><i class="fas fa-shield-alt"></i><span>Fanaraha-maso</span></button>
             <button type="button" class="type-btn" data-type="anomalie"><i class="fas fa-exclamation-triangle"></i><span>Anomalia</span></button>
             <button type="button" class="type-btn" data-type="autres"><i class="fas fa-question-circle"></i><span>Hafa</span></button>
@@ -250,7 +250,7 @@
   <div class="modal-overlay hidden" id="routeModal">
     <div class="modal">
       <div class="modal-header">
-        <h2><i class="fas fa-route"></i> Mitady Lalana</h2>
+        <h2><i class="fas fa-route"></i> <span id="mitadyId">Mitady Lalana</span></h2>
         <button class="modal-close" id="closeRouteModal"><i class="fas fa-times"></i></button>
       </div>
       <div class="modal-body">
@@ -292,12 +292,12 @@
   <div class="modal-overlay hidden" id="etaModal">
     <div class="modal">
       <div class="modal-header">
-        <h2><i class="fas fa-clock"></i> Zarao ETA</h2>
+        <h2><i class="fas fa-clock"></i> Mizara ny toerana misy anao</h2>
         <button class="modal-close" id="closeEtaModal"><i class="fas fa-times"></i></button>
       </div>
       <div class="modal-body">
         <div class="input-group">
-          <label><i class="fas fa-hourglass"></i> Hafany minitra aho hihaona (minitra)</label>
+          <label><i class="fas fa-hourglass"></i> Faharetan'ny fotoana (minitra)</label>
           <div class="input-field"><i class="fas fa-clock"></i>
             <input type="number" id="etaMinutes" value="30" min="1" max="300">
           </div>
@@ -343,7 +343,7 @@
       </div>
       <div class="modal-footer">
         <button class="btn-secondary" id="closeEditProfileModal2">Ajanony</button>
-        <button class="btn-primary" id="saveProfileBtn" style="flex:1;"><i class="fas fa-save"></i> Tehiry</button>
+        <button class="btn-primary" id="saveProfileBtn" style="flex:1;"><i class="fas fa-save"></i> Tehirizina</button>
       </div>
     </div>
   </div>
